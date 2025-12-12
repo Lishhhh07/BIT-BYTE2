@@ -116,3 +116,33 @@ body {
   }
 }
 
+.sci-fi-input {
+  position: relative;
+}
+
+.sci-fi-input::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #06b6d4, transparent);
+  transition: width 0.3s ease;
+}
+
+.sci-fi-input:focus::after {
+  width: 100%;
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(34, 211, 238, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.6);
+  }
+}
+

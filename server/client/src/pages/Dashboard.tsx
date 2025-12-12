@@ -133,7 +133,7 @@ const Dashboard = () => {
       <StarsBackground />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/70 to-slate-950 z-[1]" />
 
-      <div className="relative z-10 flex min-h-screen flex-col gap-8 px-4 pb-12 pt-6 md:px-8">
+      <div className="relative z-10 flex min-h-screen flex-col gap-8 px-4 pb-12 pt-24 md:px-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <SatelliteDish className="h-6 w-6 text-electricBlue" />

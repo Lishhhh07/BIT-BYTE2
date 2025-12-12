@@ -19,8 +19,8 @@ const LandingPage = () => {
       <ParallaxStarfield />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/60 to-slate-950 z-[1]" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-12 md:px-10 md:py-16">
-        <header className="flex items-center justify-between">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-12 md:px-10 md:py-16 pt-24">
+        <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3 text-neonPurple">
             <Sparkles className="h-6 w-6" />
             <span className="font-display text-lg tracking-wide">EcoWatch</span>
