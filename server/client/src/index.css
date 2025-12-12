@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #e2e8f0;
+  background-color: #020617;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #020617;
+  background-image: radial-gradient(#1e293b 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.07), transparent 25%),
+    radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.08), transparent 23%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.05), transparent 30%);
+  background-size: 120px 120px, cover, cover, cover;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+  color: #e2e8f0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.grid-accent {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px;
+}
+
+.button-glow {
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.35),
+    0 0 45px rgba(59, 130, 246, 0.2);
+}
+
+.fade-edge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(15, 23, 42, 0) 45%,
+    rgba(2, 6, 23, 0.9) 80%
+  );
+  pointer-events: none;
+}
+
