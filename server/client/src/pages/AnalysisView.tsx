@@ -63,7 +63,7 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
   }
 
   return (
-    <section className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8 rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+    <section className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8 backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
@@ -93,7 +93,7 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="glass grid-accent rounded-2xl p-4">
+        <div className="backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-4">
           <p className="mb-2 text-sm text-slate-300">Before</p>
           <img
             src={placeholderBefore}
@@ -101,7 +101,7 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
             className="h-64 w-full rounded-xl object-cover"
           />
         </div>
-        <div className="glass grid-accent rounded-2xl p-4">
+        <div className="backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-4">
           <p className="mb-2 text-sm text-slate-300">After</p>
           <img
             src={placeholderAfter}
@@ -136,14 +136,14 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
           animate={{ opacity: 1, y: 0 }}
           className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]"
         >
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/60">
+          <div className="overflow-hidden backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl">
             <img
               src={processedImage}
               alt="Processed imagery"
               className="h-72 w-full object-cover"
             />
           </div>
-          <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/10 p-6">
+          <div className="flex flex-col gap-4 backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-6">
             <div className="flex items-center gap-3">
               <ShieldAlert className="h-6 w-6 text-neonPurple" />
               <div>

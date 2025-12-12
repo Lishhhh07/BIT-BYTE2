@@ -4,6 +4,7 @@ import { Search, MapPin, SatelliteDish } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import AnalysisView from './AnalysisView'
 import ReportModal from '../components/ReportModal'
+import StarsBackground from '../components/StarsBackground'
 
 type Location = {
   name: string
@@ -47,6 +48,8 @@ const Dashboard = () => {
   const [analysisCoords, setAnalysisCoords] = useState<{ lat: number; lng: number } | null>(null)
   const [isZooming, setIsZooming] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
+  const [warpSpeed, setWarpSpeed] = useState(false)
+  const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null)
 
   useEffect(() => {
     if (!globeRef.current) return
@@ -75,27 +78,60 @@ const Dashboard = () => {
 
     setAutoRotate(false)
     setIsZooming(true)
-    globeRef.current.pointOfView(
-      {
-        lat: selected.lat,
-        lng: selected.lng,
-        altitude: 1.6,
-      },
-      2000
-    )
-    setAnalysisCoords({ lat: selected.lat, lng: selected.lng })
+    setWarpSpeed(true)
 
-    window.setTimeout(() => {
-      setGlobeOpacity(0)
-      setShowMap(true)
-      setIsZooming(false)
-    }, 2100)
+    // Warp speed effect: rapidly move camera forward
+    const controls = globeRef.current.controls()
+    const startAltitude = controls.getDistance()
+    const targetAltitude = 0.5
+    const duration = 2000
+    const startTime = Date.now()
+
+    const animateWarp = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+
+      const currentAltitude = startAltitude - (startAltitude - targetAltitude) * easeOut
+      globeRef.current.pointOfView(
+        {
+          lat: selected.lat,
+          lng: selected.lng,
+          altitude: currentAltitude,
+        },
+        0
+      )
+
+      if (progress < 1) {
+        requestAnimationFrame(animateWarp)
+      } else {
+        setWarpSpeed(false)
+        setGlobeOpacity(0)
+        setShowMap(true)
+        setIsZooming(false)
+      }
+    }
+
+    animateWarp()
+    setAnalysisCoords({ lat: selected.lat, lng: selected.lng })
   }
+
+  const pointsData = useMemo(
+    () =>
+      locations.map((loc) => ({
+        lat: loc.lat,
+        lng: loc.lng,
+        name: loc.name,
+        description: loc.description,
+        size: 15,
+      })),
+    []
+  )
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute inset-0 bg-starfield opacity-70" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/70 to-slate-950" />
+      <StarsBackground />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/70 to-slate-950 z-[1]" />
 
       <div className="relative z-10 flex min-h-screen flex-col gap-8 px-4 pb-12 pt-6 md:px-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
@@ -109,11 +145,11 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="glass flex w-full max-w-xl items-center gap-3 rounded-full px-4 py-3 shadow-glow">
+          <div className="backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-full flex w-full max-w-xl items-center gap-3 px-4 py-3">
             <Search className="h-5 w-5 text-slate-400" />
             <input
               className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
-              placeholder="Enter Coordinates or Region (try “Bangalore”)"
+              placeholder="Enter Coordinates or Region (try "Bangalore")"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -127,7 +163,26 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <div className="relative flex-1 overflow-hidden rounded-3xl border border-white/10 bg-black/40">
+        <div className="relative flex-1 overflow-hidden backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl">
+          {warpSpeed && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-50 pointer-events-none"
+            >
+              <div className="absolute inset-0" style={{
+                background: 'radial-gradient(circle at center, transparent, rgba(59, 130, 246, 0.2), rgba(30, 58, 138, 0.4))'
+              }} />
+              <div
+                className="absolute inset-0 warp-lines"
+                style={{
+                  background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(59, 130, 246, 0.2) 2px, rgba(59, 130, 246, 0.2) 4px)',
+                }}
+              />
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: globeOpacity }}
@@ -144,9 +199,34 @@ const Dashboard = () => {
               arcDashLength={0.6}
               arcDashGap={0.2}
               arcDashAnimateTime={4000}
+              pointsData={pointsData}
+              pointColor={() => '#ef4444'}
+              pointRadius={(d: any) => d.size || 15}
+              pointResolution={2}
+              pointLabel={(d: any) => d.name}
+              onPointHover={(point: any, prevPoint: any) => {
+                if (point) {
+                  setHoveredHotspot(point.name)
+                } else {
+                  setHoveredHotspot(null)
+                }
+              }}
               animateIn
             />
           </motion.div>
+
+          {hoveredHotspot && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute top-4 right-4 backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-4 z-20"
+            >
+              <p className="text-sm font-semibold text-white">{hoveredHotspot}</p>
+              <p className="text-xs text-slate-400 mt-1">
+                {locations.find((l) => l.name === hoveredHotspot)?.description}
+              </p>
+            </motion.div>
+          )}
 
           {showMap && (
             <motion.div
@@ -155,7 +235,7 @@ const Dashboard = () => {
               transition={{ duration: 0.8 }}
               className="absolute inset-0 grid place-items-center bg-gradient-to-b from-slate-900/90 to-slate-950"
             >
-              <div className="relative w-[90%] max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              <div className="relative w-[90%] max-w-4xl overflow-hidden backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-2xl p-4">
                 <p className="mb-3 flex items-center gap-2 text-sm uppercase tracking-[0.25em] text-slate-300">
                   <MapPin className="h-4 w-4" />
                   Satellite View
