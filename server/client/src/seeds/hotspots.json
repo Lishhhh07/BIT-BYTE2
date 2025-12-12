@@ -1,0 +1,92 @@
+[
+    {
+      "name": "Papum Reserve Forest, Arunachal Pradesh",
+      "lat": 27.05,
+      "lng": 93.02,
+      "risk_level": "Critical"
+    },
+    {
+      "name": "Sonitpur District, Assam",
+      "lat": 26.65,
+      "lng": 92.79,
+      "risk_level": "High"
+    },
+    {
+      "name": "Udalguri District, Assam",
+      "lat": 26.75,
+      "lng": 92.10,
+      "risk_level": "High"
+    },
+    {
+      "name": "Buxa Tiger Reserve, West Bengal",
+      "lat": 26.70,
+      "lng": 89.60,
+      "risk_level": "Medium"
+    },
+    {
+      "name": "Betul / Chhindwara, Madhya Pradesh",
+      "lat": 21.90,
+      "lng": 77.90,
+      "risk_level": "High"
+    },
+    {
+      "name": "Similipal National Park, Odisha",
+      "lat": 21.93,
+      "lng": 86.34,
+      "risk_level": "High"
+    },
+    {
+      "name": "Sironcha Forest Division, Maharashtra",
+      "lat": 18.85,
+      "lng": 79.96,
+      "risk_level": "High"
+    },
+    {
+      "name": "Kandhamal District, Odisha",
+      "lat": 20.20,
+      "lng": 84.15,
+      "risk_level": "High"
+    },
+    {
+      "name": "Hemgir Forest, Odisha",
+      "lat": 21.95,
+      "lng": 83.80,
+      "risk_level": "Medium"
+    },
+    {
+      "name": "Kuchinda Range, Odisha",
+      "lat": 21.75,
+      "lng": 84.35,
+      "risk_level": "Medium"
+    },
+    {
+      "name": "Senapati District Hills, Manipur",
+      "lat": 25.27,
+      "lng": 94.02,
+      "risk_level": "High"
+    },
+    {
+      "name": "Ukhrul District, Manipur",
+      "lat": 25.11,
+      "lng": 94.36,
+      "risk_level": "High"
+    },
+    {
+      "name": "Hasdeo Arand, Chhattisgarh",
+      "lat": 22.78,
+      "lng": 82.65,
+      "risk_level": "Critical"
+    },
+    {
+      "name": "Saranda Forest, Jharkhand",
+      "lat": 22.13,
+      "lng": 85.13,
+      "risk_level": "Critical"
+    },
+    {
+      "name": "National Chambal Sanctuary, Madhya Pradesh",
+      "lat": 26.50,
+      "lng": 78.00,
+      "risk_level": "Medium"
+    }
+  ]
