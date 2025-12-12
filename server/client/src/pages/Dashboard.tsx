@@ -4,7 +4,7 @@ import { Search, MapPin, SatelliteDish, AlertTriangle } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import axios from 'axios'
 import AnalysisView from './AnalysisView'
-import ReportModal from '../components/ReportModal'
+import ReportEditor from '../components/ReportEditor'
 import StarsBackground from '../components/StarsBackground'
 
 type Hotspot = {
@@ -37,6 +37,7 @@ const Dashboard = () => {
   const [reportOpen, setReportOpen] = useState(false)
   const [warpSpeed, setWarpSpeed] = useState(false)
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null)
+  const [analysisData, setAnalysisData] = useState<any>(null)
 
   // Fetch hotspots from API
   useEffect(() => {
@@ -365,15 +366,22 @@ const Dashboard = () => {
         {showMap && (
           <AnalysisView
             coordinates={analysisCoords}
-            onReportReady={() => setReportOpen(true)}
+            onReportReady={(data) => {
+              setAnalysisData(data)
+              setReportOpen(true)
+            }}
           />
         )}
       </div>
 
-      <ReportModal
+      <ReportEditor
         open={reportOpen}
         onClose={() => setReportOpen(false)}
         coordinates={analysisCoords}
+        analysisData={analysisData}
+        regionName={hotspots.find((h) => 
+          h.lat === analysisCoords?.lat && h.lng === analysisCoords?.lng
+        )?.name || 'India'}
       />
     </div>
   )

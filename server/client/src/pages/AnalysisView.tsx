@@ -5,7 +5,14 @@ import { useMemo, useState } from 'react'
 
 type AnalysisViewProps = {
   coordinates?: { lat: number; lng: number } | null
-  onReportReady: () => void
+  onReportReady: (data: {
+    deforestationScore: number
+    startDate: string
+    endDate: string
+    beforeImage: string
+    afterImage: string
+    acreageLost: string
+  }) => void
 }
 
 type AnalysisResult = {
@@ -28,6 +35,23 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
   const [timeline, setTimeline] = useState('3m')
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle')
   const [result, setResult] = useState<AnalysisResult | null>(null)
+
+  const getDateRange = (timelineValue: string) => {
+    const end = new Date()
+    const start = new Date()
+    switch (timelineValue) {
+      case '3m':
+        start.setMonth(start.getMonth() - 3)
+        break
+      case '6m':
+        start.setMonth(start.getMonth() - 6)
+        break
+      case '1y':
+        start.setFullYear(start.getFullYear() - 1)
+        break
+    }
+    return { start, end }
+  }
 
   const processedImage = useMemo(
     () =>
@@ -161,7 +185,18 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
             </p>
             <div className="flex gap-3">
               <button
-                onClick={onReportReady}
+                onClick={() => {
+                  const dateRange = getDateRange(timeline)
+                  const score = parseFloat(result?.acreageLost.replace(/[^0-9.]/g, '') || '0') / 10 // Mock score calculation
+                  onReportReady({
+                    deforestationScore: score || 15.5,
+                    startDate: dateRange.start.toISOString(),
+                    endDate: dateRange.end.toISOString(),
+                    beforeImage: placeholderBefore,
+                    afterImage: processedImage,
+                    acreageLost: result?.acreageLost || '1,240 acres',
+                  })
+                }}
                 className="flex items-center gap-2 rounded-full bg-gradient-to-r from-neonPurple to-electricBlue px-4 py-2 text-sm font-semibold text-white transition hover:scale-[1.01]"
               >
                 Generate Legal Report
