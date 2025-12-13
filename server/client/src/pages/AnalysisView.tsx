@@ -64,12 +64,9 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
   const handleAnalyze = async () => {
     setStatus('loading')
     try {
-      const response = await axios.post(getAIServerURL('/analyze'), {
-        lat: coordinates?.lat,
-        lng: coordinates?.lng,
+      const response = await axios.post('http://localhost:5000/analyze', {
+        coordinates,
         timeline,
-      }, {
-        timeout: 30000,
       })
       const payload = response.data || {}
       setResult({
