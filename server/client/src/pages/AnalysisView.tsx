@@ -2,6 +2,7 @@ import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Loader2, ShieldAlert } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { getAIServerURL } from '../config/api'
 
 type AnalysisViewProps = {
   coordinates?: { lat: number; lng: number } | null
@@ -63,9 +64,12 @@ const AnalysisView = ({ coordinates, onReportReady }: AnalysisViewProps) => {
   const handleAnalyze = async () => {
     setStatus('loading')
     try {
-      const response = await axios.post('http://localhost:5000/analyze', {
-        coordinates,
+      const response = await axios.post(getAIServerURL('/analyze'), {
+        lat: coordinates?.lat,
+        lng: coordinates?.lng,
         timeline,
+      }, {
+        timeout: 30000,
       })
       const payload = response.data || {}
       setResult({

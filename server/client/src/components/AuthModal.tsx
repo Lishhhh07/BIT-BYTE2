@@ -36,10 +36,17 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
       })
 
       if (response.data.message) {
+        // In development, show OTP if provided
+        if (response.data.devOtp) {
+          console.log('🔑 Development OTP:', response.data.devOtp)
+          setError(`Development Mode: OTP is ${response.data.devOtp}. Check server console for details.`)
+          setTimeout(() => setError(''), 10000) // Clear after 10 seconds
+        }
         setStep('otp')
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Signup failed')
+      const errorMessage = err.response?.data?.error || 'Failed to create account. Please try again.'
+      setError(errorMessage)
       triggerShake()
     } finally {
       setLoading(false)
@@ -67,7 +74,19 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
         }, 2000)
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed')
+      let errorMessage = err.response?.data?.error || 'Login failed. Please check your credentials.'
+      
+      // If user needs verification, provide helpful message
+      if (err.response?.data?.needsVerification) {
+        errorMessage = 'Please verify your email first. You can sign up again to resend the verification code.'
+      }
+      
+      // Handle network errors
+      if (!err.response) {
+        errorMessage = 'Unable to connect to server. Please check if the server is running.'
+      }
+      
+      setError(errorMessage)
       triggerShake()
     } finally {
       setLoading(false)
@@ -198,8 +217,8 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
           {/* Close button */}
           <button
             onClick={() => {
-              onClose()
               resetForm()
+              onClose()
             }}
             className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10"
           >
@@ -287,7 +306,10 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
                   <div className="text-center">
                     <button
                       type="button"
-                      onClick={() => setStep(step === 'login' ? 'signup' : 'login')}
+                      onClick={() => {
+                        setStep(step === 'login' ? 'signup' : 'login')
+                        setError('') // Clear error when switching steps
+                      }}
                       className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
                     >
                       {step === 'login'
@@ -350,7 +372,10 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
                   <div className="text-center">
                     <button
                       type="button"
-                      onClick={() => setStep('login')}
+                      onClick={() => {
+                        setStep('login')
+                        setError('') // Clear error when switching
+                      }}
                       className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
                     >
                       Already verified? Login instead

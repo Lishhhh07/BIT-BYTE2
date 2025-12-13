@@ -37,7 +37,8 @@ const Navbar = () => {
               </button>
             )}
 
-            {isAuthenticated && user ? (
+            {/* Optional: Show user info if logged in, but don't require it */}
+            {isAuthenticated && user && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -59,14 +60,6 @@ const Navbar = () => {
                   <LogOut className="h-5 w-5" />
                 </button>
               </motion.div>
-            ) : (
-              <button
-                onClick={() => setAuthModalOpen(true)}
-                className="flex items-center gap-2 backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_0_15px_rgba(168,85,247,0.5)] rounded-full px-4 py-2 text-sm text-white hover:border-cyan-400/50 transition-colors"
-              >
-                <User className="h-4 w-4" />
-                <span>Login</span>
-              </button>
             )}
           </div>
         </div>
